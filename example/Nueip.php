@@ -437,11 +437,15 @@ class Nueip
 
         $contents = [
             "# {$this->start} ～ {$this->end} 工作進度跟預計完成時間",
+            "## 統計清單",
         ];
 
         $countSize = [];
         $countType = [];
+        $count = 0;
         foreach ($data as $developer => $statusGroup) {
+            $count++;
+            $contents[] = $count . ". [{$developer} 專案統計](#" . strtolower($developer) . "-專案統計)";
             foreach ($statusGroup as $status => $sizeGroup) {
                 foreach ($sizeGroup as $size => $cardGroup) {
                     $countSize[$developer][$size][$status] = ($countSize[$developer][$size][$status] ?? 0) + count($cardGroup);
@@ -553,6 +557,6 @@ switch ($argv[1] ?? '') {
         (new Nueip([
             'start' => date('Y-m-d', strtotime('first day of last month')),
             'end' => date('Y-m-d', strtotime('last day of last month')),
-        ]))->devMonthCount();
+        ]))->devWeekCount();
         break;
 }
