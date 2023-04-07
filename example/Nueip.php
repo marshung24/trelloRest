@@ -143,7 +143,7 @@ class Nueip
                 return count($intersect) ? array_merge($filter, $intersect) : null;
             }, $res);
             $this->_saveOutupt("{$group}.json", array_filter($res));
-            $this->_saveMD("{$group}.md", array_filter($res));
+            $this->_saveMD("{$group}-" . str_replace('-', '', $this->start) . "~" . str_replace('-', '', $this->end) . ".md", array_filter($res));
         }
     }
 
@@ -466,6 +466,34 @@ class Nueip
         $statusMap = ['未處理', '開發中', '已完成'];
         $sizeMap = ['A-1日內', 'B-5日內', 'C-10日內', 'D-20日內', 'E-超過20日', 'X-未規劃'];
         $typeMap = ['Hotfix', 'Patch', 'Dev', 'Other'];
+
+        // ========== 統計總計 ==========
+        $contents[] = '';
+        $contents[] = '| 專案規模   | ' . implode(' | ', $statusMap) . ' |';
+        $contents[] = '| :--------- | -----: | -----: | -----: |';
+
+        foreach ($sizeMap as $size) {
+            $count = $countSize['總計'][$size] ?? [];
+            $contentsRow = [str_pad($size, 10, ' ')];
+            foreach ($statusMap as $status) {
+                $contentsRow[] = str_pad($count[$status] ?? '', 6, ' ', STR_PAD_LEFT);
+            }
+            $contents[] = '| ' . implode(' | ', $contentsRow) . ' |';
+        }
+
+        $contents[] = '';
+        $contents[] = '| 專案種類   | ' . implode(' | ', $statusMap) . ' |';
+        $contents[] = '| :--------- | -----: | -----: | -----: |';
+
+        foreach ($typeMap as $type) {
+            $count = $countType['總計'][$type] ?? [];
+            $contentsRow = [str_pad($type, 10, ' ')];
+            foreach ($statusMap as $status) {
+                $contentsRow[] = str_pad($count[$status] ?? '', 6, ' ', STR_PAD_LEFT);
+            }
+            $contents[] = '| ' . implode(' | ', $contentsRow) . ' |';
+        }
+        // ==============================
 
         foreach ($data as $developer => $statusGroup) {
             $contents[] = '';
