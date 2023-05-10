@@ -451,7 +451,7 @@ class Nueip
                     $countSize[$developer][$size][$status] = ($countSize[$developer][$size][$status] ?? 0) + count($cardGroup);
                     $countSize['總計'][$size][$status] = ($countSize['總計'][$size][$status] ?? 0) + count($cardGroup);
                     foreach ($cardGroup as $cardMeta) {
-                        preg_match('/dev|patch|hotfix/i', $cardMeta['name'], $matches);
+                        preg_match('/dev|patch|bug|survey/i', $cardMeta['name'], $matches);
                         $cardType = ucfirst(strtolower($matches[0] ?? 'other'));
                         $countType[$developer][$cardType][$status] = ($countType[$developer][$cardType][$status] ?? 0) + 1;
                         $countType['總計'][$cardType][$status] = ($countType['總計'][$cardType][$status] ?? 0) + 1;
@@ -465,7 +465,7 @@ class Nueip
 
         $statusMap = ['未處理', '開發中', '已完成'];
         $sizeMap = ['A-1日內', 'B-5日內', 'C-10日內', 'D-20日內', 'E-超過20日', 'X-未規劃'];
-        $typeMap = ['Hotfix', 'Patch', 'Dev', 'Other'];
+        $typeMap = ['Survey', 'Bug', 'Patch', 'Dev', 'Other'];
 
         // ========== 統計總計 ==========
         $contents[] = '';
